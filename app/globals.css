@@ -11,6 +11,14 @@
   --danger-bg: #fef2f2;
   --warn: #b45309;
   --done: #9ca3af;
+  --success: #16a34a;
+  --track: #e5e7eb;
+  --high: #dc2626;
+  --high-bg: #fee2e2;
+  --medium: #b45309;
+  --medium-bg: #fef3c7;
+  --low: #475569;
+  --low-bg: #e2e8f0;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -26,6 +34,14 @@
     --danger-bg: #3b1d1d;
     --warn: #fbbf24;
     --done: #6b7280;
+    --success: #4ade80;
+    --track: #374151;
+    --high: #fca5a5;
+    --high-bg: #4c1d1d;
+    --medium: #fcd34d;
+    --medium-bg: #45320f;
+    --low: #cbd5e1;
+    --low-bg: #334155;
   }
 }
 
@@ -49,7 +65,8 @@ body {
 }
 
 button,
-input {
+input,
+select {
   font: inherit;
 }
 
@@ -70,11 +87,19 @@ input {
 }
 
 .add-form {
+  padding: 14px;
+  margin-bottom: 16px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+.add-row {
   display: flex;
   gap: 8px;
 }
 
-.add-form input {
+.add-row input {
   flex: 1;
   min-width: 0;
   padding: 12px 14px;
@@ -85,12 +110,14 @@ input {
   color: var(--text);
 }
 
-.add-form input:focus {
+.add-row input:focus,
+.due-field input:focus,
+.sort-bar select:focus {
   outline: none;
   border-color: var(--primary);
 }
 
-.add-form input[aria-invalid="true"] {
+.add-row input[aria-invalid="true"] {
   border-color: var(--danger);
 }
 
@@ -116,7 +143,7 @@ input {
 
 .input-help {
   min-height: 1.6em;
-  margin: 6px 4px 16px;
+  margin: 6px 4px 10px;
   font-size: 0.85rem;
   color: var(--muted);
 }
@@ -253,6 +280,260 @@ input {
   color: var(--muted);
 }
 
+/* ---------- 達成率 ---------- */
+
+.summary-overdue {
+  color: var(--danger);
+}
+
+.progress {
+  margin: 0 0 20px;
+  padding: 12px 14px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+.progress-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 6px;
+}
+
+.progress-title {
+  font-weight: bold;
+}
+
+.progress-value {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.progress-track {
+  height: 12px;
+  border-radius: 999px;
+  background: var(--track);
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--primary);
+  transition: width 0.4s ease;
+}
+
+.progress-bar.complete {
+  background: var(--success);
+}
+
+.progress-note {
+  margin: 6px 0 0;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+/* ---------- 期限・優先順位の入力 ---------- */
+
+.add-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+}
+
+.option {
+  margin: 0;
+  padding: 0;
+  border: none;
+  min-width: 0;
+}
+
+.option-label {
+  display: block;
+  padding: 0;
+  margin-bottom: 4px;
+  font-size: 0.85rem;
+  font-weight: bold;
+  color: var(--muted);
+}
+
+.due-field {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.due-field input {
+  min-height: 44px;
+  padding: 8px 10px;
+  font-size: 16px;
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  background: var(--card);
+  color: var(--text);
+}
+
+.btn-sub {
+  min-height: 44px;
+  padding: 0 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.btn-sub:hover {
+  color: var(--text);
+  border-color: var(--muted);
+}
+
+.priority-picker {
+  display: flex;
+  gap: 6px;
+}
+
+.priority-choice {
+  position: relative;
+  min-width: 56px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 14px;
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  color: var(--muted);
+  user-select: none;
+}
+
+.priority-choice input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.priority-choice:has(input:focus-visible) {
+  outline: 3px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.priority-choice.selected.priority-high {
+  border-color: var(--high);
+  background: var(--high-bg);
+  color: var(--high);
+}
+
+.priority-choice.selected.priority-medium {
+  border-color: var(--medium);
+  background: var(--medium-bg);
+  color: var(--medium);
+}
+
+.priority-choice.selected.priority-low {
+  border-color: var(--low);
+  background: var(--low-bg);
+  color: var(--low);
+}
+
+/* ---------- 並び替え ---------- */
+
+.sort-bar {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.sort-bar select {
+  min-height: 40px;
+  padding: 6px 10px;
+  font-size: 16px;
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  background: var(--card);
+  color: var(--text);
+  cursor: pointer;
+}
+
+/* ---------- タスクの期限・優先順位表示 ---------- */
+
+.todo-body {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.todo-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 10px;
+  font-size: 0.8rem;
+}
+
+.priority-badge {
+  padding: 1px 8px;
+  border-radius: 999px;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.priority-badge.priority-high {
+  background: var(--high-bg);
+  color: var(--high);
+}
+
+.priority-badge.priority-medium {
+  background: var(--medium-bg);
+  color: var(--medium);
+}
+
+.priority-badge.priority-low {
+  background: var(--low-bg);
+  color: var(--low);
+}
+
+.due {
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.due-status {
+  margin-left: 6px;
+  font-weight: bold;
+}
+
+.due-today,
+.due-soon {
+  color: var(--warn);
+}
+
+.due-overdue {
+  color: var(--danger);
+  font-weight: bold;
+}
+
+.todo-list li.overdue {
+  border-color: var(--danger);
+  border-left-width: 5px;
+  background: var(--danger-bg);
+}
+
+.todo-list li.done .priority-badge {
+  opacity: 0.55;
+}
+
 button:focus-visible,
 input[type="checkbox"]:focus-visible {
   outline: 3px solid var(--primary);
@@ -276,5 +557,15 @@ input[type="checkbox"]:focus-visible {
   }
   .header h1 {
     font-size: 1.4rem;
+  }
+  .add-options {
+    flex-direction: column;
+  }
+  .due-field input {
+    flex: 1;
+    min-width: 0;
+  }
+  .priority-choice {
+    flex: 1;
   }
 }
